@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource, Repository } from 'typeorm';
 import { PetPost } from '../../../data';
-import { User } from '../../../data'; // ✅ importar User también
+import { User } from '../../../data';
 import 'dotenv/config';
 import { CustomError } from '../../../domain/errors';
 
@@ -14,7 +14,7 @@ const dataSource = new DataSource({
   database: process.env.DATABASE_NAME,
   synchronize: true,
   logging: false,
-  entities: [PetPost, User], // ✅ agregar ambas entidades
+  entities: [PetPost, User],
   ssl: {
     rejectUnauthorized: false,
   },
