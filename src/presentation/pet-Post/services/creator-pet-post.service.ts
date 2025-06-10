@@ -1,21 +1,19 @@
-import { PetPost } from "../../../data";
-import { CustomError } from "../../../domain/errors";
+import { PetPost, petPostStatus, User } from "../../../data";
+import { CreatePetDto } from "../../../domain/dtos/pets/create-pets.dto";
 
 
 export class CreatorPetPostService {
-
-  async execute(data: any) {
-
+  async execute(dto: CreatePetDto, user: User): Promise<PetPost> {
     const petPost = new PetPost();
 
-    petPost.petName = data.petName.trim().toLowerCase();
-    petPost.description = data.description.trim().toLowerCase();
-    petPost.image_url = data.imagen_url.trim();
+    petPost.petName = dto.petName;
+    petPost.description = dto.description;
+    petPost.image_url = dto.image_url;
+    petPost.user = user;
+    petPost.status = petPostStatus.PENDING; // ✅ ENUM
+    petPost.hasFound = false;
 
-    try {
-      return await petPost.save();
-    } catch (error) {
-      throw CustomError.internalServer('internal server error');
-    }
+    await petPost.save();
+    return petPost;
   }
 }

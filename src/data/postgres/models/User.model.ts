@@ -2,7 +2,6 @@ import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "t
 import { PetPost } from "./Pet-post-model";
 import { Exclude } from "class-transformer";
 
-
 export enum userRole {
   USER = "user",
   ADMIN = "admin"
@@ -50,8 +49,6 @@ export class User extends BaseEntity {
   })
   created_at: Date;
 
-
   @OneToMany(() => PetPost, (petPost) => petPost.user)
-
-  petPosts: PetPost[];
+  petPosts: PetPost[]; // ✅ decorador correctamente asociado
 }

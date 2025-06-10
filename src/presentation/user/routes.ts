@@ -5,7 +5,7 @@ import { LoginUserService } from "./services/login-user.service";
 import { FinderUserService } from "./services/finder-user.service";
 import { DeleteUserService } from "./services/delete-user.service";
 import { ModifierUserService } from "./services/modifier-user.service";
-import { AuthMiddleware } from "../common/errors/middlewares.ts/auth.middleware";
+import { AuthMiddleware } from "../common/errors/middlewares/auth.middleware";
 import { userRole } from "../../data";
 
 export class UserRoutes {

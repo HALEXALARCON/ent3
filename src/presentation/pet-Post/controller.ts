@@ -21,12 +21,14 @@ export class PetPostController {
   // Crear una nueva publicación de mascota
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const petPost = await this.creatorPetPostService.execute(req.body);
+      const petPost = await this.creatorPetPostService.execute(req.body, req.body.sessionUser); // ✅ Se pasa el usuario
+      console.log(petPost)
       res.status(201).json(petPost);
     } catch (error) {
       handleError(error, res);
     }
   };
+
 
   // Obtener todas las publicaciones de mascotas
   findAll = async (_req: Request, res: Response): Promise<void> => {

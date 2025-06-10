@@ -1,7 +1,9 @@
 import 'reflect-metadata';
 import { DataSource, Repository } from 'typeorm';
 import { PetPost } from '../../../data';
+import { User } from '../../../data'; // ✅ importar User también
 import 'dotenv/config';
+import { CustomError } from '../../../domain/errors';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -12,7 +14,7 @@ const dataSource = new DataSource({
   database: process.env.DATABASE_NAME,
   synchronize: true,
   logging: false,
-  entities: [PetPost],
+  entities: [PetPost, User], // ✅ agregar ambas entidades
   ssl: {
     rejectUnauthorized: false,
   },
@@ -41,18 +43,19 @@ export class ModifierPetPostService {
     if (!this.petPostRepository) {
       await this.initializeRepository();
     }
+    console.log('ID:', id);
 
-    // Verifica si la publicación de mascota existe
     const petPost = await this.petPostRepository.findOne({ where: { id } });
     if (!petPost) {
-      throw new Error('Publicación de mascota no encontrada');
+      throw CustomError.notFound('Pet post not found');
     }
 
-    // Actualiza los campos de la publicación de mascota
-    Object.assign(petPost, data);
-
-    // Guarda los cambios y devuelve la entidad actualizada
-    const updatedPetPost = await this.petPostRepository.save(petPost);
-    return updatedPetPost;
+    try {
+      Object.assign(petPost, data);
+      const updatedPetPost = await this.petPostRepository.save(petPost);
+      return updatedPetPost;
+    } catch (error) {
+      throw CustomError.internalServer("Internal server error");
+    }
   }
 }
